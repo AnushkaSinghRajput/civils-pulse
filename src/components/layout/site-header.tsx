@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 const nav = [
   { href: "/pyq", label: "PYQ Explorer" },
   { href: "/mocks", label: "Mocks" },
-  { href: "/dashboard", label: "Dashboard" },
 ];
 
 export async function SiteHeader() {
@@ -28,19 +27,29 @@ export async function SiteHeader() {
               </Link>
             ))}
             {session?.user?.role === "ADMIN" && (
-              <Link href="/admin" className="transition-colors hover:text-[var(--brand)]">
-                Admin
-              </Link>
+              <>
+                <Link href="/admin" className="transition-colors hover:text-[var(--brand)]">
+                  Admin
+                </Link>
+                <Link href="/admin/users" className="transition-colors hover:text-[var(--brand)]">
+                  Users
+                </Link>
+              </>
             )}
           </nav>
         </div>
         <div className="flex items-center gap-2">
           {session?.user ? (
             <>
-              <span className="hidden max-w-[14rem] truncate text-xs text-[var(--muted-fg)] sm:inline">
+              <span className="hidden max-w-[12rem] truncate text-xs text-[var(--muted-fg)] sm:inline">
                 {session.user.name ?? session.user.email}
                 <span className="text-[var(--accent)]"> · {session.user.plan}</span>
               </span>
+              <Link href="/practice">
+                <Button size="sm" variant="outline">
+                  Practice
+                </Button>
+              </Link>
               <form
                 action={async () => {
                   "use server";
