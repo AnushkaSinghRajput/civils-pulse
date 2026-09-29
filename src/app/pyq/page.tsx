@@ -3,6 +3,8 @@ import { requireSession } from "@/lib/session";
 import { QuestionCard } from "@/components/pyq/question-card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { JumpInBar } from "@/components/prepare/jump-in";
+import { SUBJECT_CARDS } from "@/lib/catalog";
 import { PaperCode, Language, Prisma } from "@/generated/prisma/client";
 import type { Metadata } from "next";
 
@@ -18,8 +20,12 @@ export default async function PyqExplorerPage({ searchParams }: { searchParams: 
   const paper = typeof sp.paper === "string" ? (sp.paper as PaperCode) : undefined;
   const language = typeof sp.language === "string" ? (sp.language as Language) : undefined;
   const topic = typeof sp.topic === "string" ? sp.topic : undefined;
+  const subjectGroup = typeof sp.subjectGroup === "string" ? sp.subjectGroup : undefined;
   const page = Math.max(1, Number(typeof sp.page === "string" ? sp.page : 1) || 1);
   const pageSize = 10;
+
+  const group = SUBJECT_CARDS.find((c) => c.slug === subjectGroup);
+  const groupTopicSlugs = group?.topicSlugs ?? [];
 
   const where: Prisma.QuestionWhereInput = {
     verificationStatus: "APPROVED",
@@ -29,12 +35,15 @@ export default async function PyqExplorerPage({ searchParams }: { searchParams: 
     ...(language && Object.values(Language).includes(language) ? { language } : {}),
     ...(topic
       ? { topics: { some: { topic: { slug: topic } } } }
-      : {}),
+      : groupTopicSlugs.length
+        ? { topics: { some: { topic: { slug: { in: groupTopicSlugs } } } } }
+        : {}),
     ...(q
       ? {
           OR: [
             { stem: { contains: q, mode: "insensitive" } },
             { explanation: { contains: q, mode: "insensitive" } },
+            { subject: { contains: q, mode: "insensitive" } },
           ],
         }
       : {}),
@@ -53,12 +62,28 @@ export default async function PyqExplorerPage({ searchParams }: { searchParams: 
     }),
     prisma.topic.findMany({
       where: { parentId: null },
-      orderBy: { name: "asc" },
-      take: 40,
+      orderBy: [{ subject: "asc" }, { name: "asc" }],
+      take: 60,
     }),
   ]);
 
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  const activeLabel =
+    group?.title ??
+    (paper ? String(paper).replaceAll("_", " ") : null) ??
+    (topic ? topics.find((t) => t.slug === topic)?.name : null);
+
+  function pageHref(nextPage: number) {
+    return `?${new URLSearchParams({
+      ...(q ? { q } : {}),
+      ...(year ? { year: String(year) } : {}),
+      ...(paper ? { paper } : {}),
+      ...(language ? { language } : {}),
+      ...(topic ? { topic } : {}),
+      ...(subjectGroup ? { subjectGroup } : {}),
+      page: String(nextPage),
+    }).toString()}`;
+  }
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8">
@@ -66,19 +91,32 @@ export default async function PyqExplorerPage({ searchParams }: { searchParams: 
         PYQ Explorer
       </h1>
       <p className="mt-2 max-w-2xl text-sm text-[var(--muted-fg)]">
-        Human-verified Prelims questions across Polity, Economy, History, Geography,
-        Environment, Science &amp; Tech, Art &amp; Culture, IR and Security — each with an
-        official UPSC source link.
+        Human-verified questions with official UPSC source links. Filter by paper or subject hub to
+        start preparing immediately.
       </p>
+      {activeLabel && (
+        <p className="mt-3 text-sm font-medium text-[var(--brand)]">
+          Active filter: {activeLabel} · {total} question{total === 1 ? "" : "s"}
+        </p>
+      )}
+
+      <JumpInBar className="mt-6" />
 
       <form className="mt-6 grid gap-3 rounded-lg border border-[var(--border)] bg-[var(--surface)] p-4 md:grid-cols-6">
         <Input
           name="q"
-          placeholder="Keyword search"
+          placeholder="Search keywords / subject"
           defaultValue={q}
           className="md:col-span-2"
         />
-        <Input name="year" type="number" min={2014} max={2025} placeholder="Year" defaultValue={year || ""} />
+        <Input
+          name="year"
+          type="number"
+          min={2014}
+          max={2026}
+          placeholder="Year"
+          defaultValue={year || ""}
+        />
         <select
           name="paper"
           defaultValue={paper ?? ""}
@@ -94,13 +132,16 @@ export default async function PyqExplorerPage({ searchParams }: { searchParams: 
           <option value="MAINS_ESSAY">Essay</option>
         </select>
         <select
-          name="language"
-          defaultValue={language ?? ""}
+          name="subjectGroup"
+          defaultValue={subjectGroup ?? ""}
           className="h-10 rounded-md border border-[var(--border)] bg-[var(--surface)] px-2 text-sm"
         >
-          <option value="">Language</option>
-          <option value="EN">English</option>
-          <option value="HI">Hindi</option>
+          <option value="">Subject hub</option>
+          {SUBJECT_CARDS.map((c) => (
+            <option key={c.slug} value={c.slug}>
+              {c.title}
+            </option>
+          ))}
         </select>
         <select
           name="topic"
@@ -114,8 +155,9 @@ export default async function PyqExplorerPage({ searchParams }: { searchParams: 
             </option>
           ))}
         </select>
+        <input type="hidden" name="language" value={language ?? ""} />
         <Button type="submit" className="md:col-span-6 md:w-fit">
-          Filter
+          Apply filters
         </Button>
       </form>
 
@@ -156,14 +198,7 @@ export default async function PyqExplorerPage({ searchParams }: { searchParams: 
         <div className="mt-8 flex items-center justify-between text-sm">
           <a
             className={page <= 1 ? "pointer-events-none opacity-40" : "underline"}
-            href={`?${new URLSearchParams({
-              ...(q ? { q } : {}),
-              ...(year ? { year: String(year) } : {}),
-              ...(paper ? { paper } : {}),
-              ...(language ? { language } : {}),
-              ...(topic ? { topic } : {}),
-              page: String(page - 1),
-            }).toString()}`}
+            href={pageHref(page - 1)}
           >
             Previous
           </a>
@@ -172,14 +207,7 @@ export default async function PyqExplorerPage({ searchParams }: { searchParams: 
           </span>
           <a
             className={page >= totalPages ? "pointer-events-none opacity-40" : "underline"}
-            href={`?${new URLSearchParams({
-              ...(q ? { q } : {}),
-              ...(year ? { year: String(year) } : {}),
-              ...(paper ? { paper } : {}),
-              ...(language ? { language } : {}),
-              ...(topic ? { topic } : {}),
-              page: String(page + 1),
-            }).toString()}`}
+            href={pageHref(page + 1)}
           >
             Next
           </a>
