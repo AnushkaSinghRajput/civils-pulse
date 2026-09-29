@@ -33,7 +33,7 @@ export function QuestionCard(q: QuestionCardProps) {
         <Badge>{q.paper.replaceAll("_", " ")}</Badge>
         <Badge>{q.language}</Badge>
         {q.kind === "GENERATED_PRACTICE" && (
-          <Badge tone="warn">Generated practice — not official UPSC</Badge>
+          <Badge tone="warn">Generated practice (not official UPSC)</Badge>
         )}
         {q.kind === "OFFICIAL_PYQ" && <Badge tone="success">Verified PYQ</Badge>}
         {q.topics?.map((t) => (
@@ -53,12 +53,24 @@ export function QuestionCard(q: QuestionCardProps) {
           ) : null,
         )}
       </ul>
-      {q.showAnswer && q.correctOption && (
+      {q.showAnswer && (q.correctOption || q.explanation) && (
         <div className="mt-4 rounded-md bg-[var(--surface-2)] p-3 text-sm">
-          <p>
-            <span className="font-medium">Answer:</span> ({q.correctOption})
+          {q.correctOption && (
+            <p>
+              <span className="font-medium">Answer:</span> ({q.correctOption})
+            </p>
+          )}
+          {q.explanation && (
+            <p className={`text-[var(--muted-fg)] ${q.correctOption ? "mt-2" : ""}`}>
+              {!q.correctOption && <span className="font-medium text-[var(--foreground)]">Model answer framework: </span>}
+              {q.explanation}
+            </p>
+          )}
+          <p className="mt-2 text-[11px] text-[var(--muted-fg)]">
+            {q.correctOption
+              ? "Key cross-checked against UPSC official papers and standard prep references. Prefer the official PDF if keys differ."
+              : "Mains has no official MCQ key — this is a study framework to structure your answer. Always verify against the official question paper PDF."}
           </p>
-          {q.explanation && <p className="mt-2 text-[var(--muted-fg)]">{q.explanation}</p>}
         </div>
       )}
       <p className="mt-4 text-xs text-[var(--muted-fg)]">
