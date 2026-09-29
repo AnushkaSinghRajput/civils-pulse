@@ -1,0 +1,17 @@
+{
+  "name": "CivilsPulse",
+  "short_name": "CivilsPulse",
+  "description": "Verified UPSC PYQs and Prelims mocks",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f3f0e8",
+  "theme_color": "#0f4c5c",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
