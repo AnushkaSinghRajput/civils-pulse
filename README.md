@@ -31,14 +31,17 @@ npm run dev
 
 Open http://localhost:3000
 
-**Owner login:** `anushkasinghrajputt@gmail.com` / `password123` (ADMIN)  
-**All seed users** share password `password123` (20 accounts).
+**Owner login:** `anushkasinghrajputt@gmail.com` / `password123` (ADMIN)
+
+Admin **Users** lists only real accounts — anyone who registers or signs in. Fake `@civilspulse.local` demo users are removed on seed.
 
 ## Seed content
 
-- 20 users (owner admin + aspirants)
-- Prelims topics across Polity, Economy, History, Geography, Environment, S&T, Art & Culture, IR, Security
-- Curated PYQs with official UPSC PDF URLs
+- Bootstrap owner admin only (real users appear after login/register)
+- Prelims PYQs spanning 2015–2025 (expanding bank with answer keys)
+- Full CSM 2026 Mains GS-I–IV papers with model-answer frameworks
+- Official PDFs under `public/upsc/mains-2026/`
+- Prelims topics across Polity, Economy, History, Geography, Environment, S&T, Art & Culture, IR, Security, Ethics, Society
 - Mixed + topic-wise mock templates
 
 ## Key routes
