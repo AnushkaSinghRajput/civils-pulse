@@ -2,24 +2,34 @@ export type SeedPyq = {
   year: number;
   questionNumber: number;
   topicSlug: string;
+  paper?: "PRELIMS_GS1" | "PRELIMS_CSAT" | "MAINS_GS1" | "MAINS_GS2" | "MAINS_GS3" | "MAINS_GS4" | "MAINS_ESSAY";
+  examType?: "PRELIMS" | "MAINS";
   stem: string;
-  optionA: string;
-  optionB: string;
-  optionC: string;
-  optionD: string;
-  correctOption: "A" | "B" | "C" | "D";
+  optionA?: string | null;
+  optionB?: string | null;
+  optionC?: string | null;
+  optionD?: string | null;
+  correctOption?: "A" | "B" | "C" | "D" | null;
   explanation: string;
   officialSourceUrl: string;
   status?: "APPROVED" | "EXTRACTED" | "IN_REVIEW";
+  marks?: number;
+  wordLimit?: number;
 };
 
 /** Official English GS-I paper URLs used for provenance. */
 export const SOURCE_PDFS: Record<number, string> = {
+  2015: "https://upsc.gov.in/sites/default/files/General_Studies_I.pdf",
+  2016: "https://upsc.gov.in/sites/default/files/GENERAL_STUDIES_PAPER_I.pdf",
+  2017: "https://upsc.gov.in/sites/default/files/General_Studies_Paper_I_0.pdf",
+  2018: "https://upsc.gov.in/sites/default/files/GeneralStudies_I.pdf",
+  2019: "https://upsc.gov.in/sites/default/files/General_Studies_Paper_I.pdf",
   2020: "https://upsc.gov.in/sites/default/files/General_Studies_Paper_I.pdf",
   2021: "https://upsc.gov.in/sites/default/files/CSP-21-General-Studies-I-120621.pdf",
   2022: "https://upsc.gov.in/sites/default/files/QP-CSP-22-GS-I-050622.pdf",
   2023: "https://upsc.gov.in/sites/default/files/QP-CSP-23-GENERAL-STUDIES-I-Engl-060623.pdf",
   2024: "https://upsc.gov.in/sites/default/files/QP-CSP-24-GS-I-Engl-160624.pdf",
+  2025: "https://upsc.gov.in/sites/default/files/QP-CSP-25-GS-I-Engl.pdf",
 };
 
 /**
@@ -459,5 +469,129 @@ export const SEED_PYQS: SeedPyq[] = [
       "These Digital India building blocks have been described as leveraging open digital ecosystems/platforms.",
     officialSourceUrl: SOURCE_PDFS[2022],
     status: "EXTRACTED",
+  },
+  // Economic & Social Development
+  {
+    year: 2021,
+    questionNumber: 1201,
+    topicSlug: "economy-social-development",
+    stem: "With reference to India, consider the following statements:\n1. Retail investors through mutual funds can invest in ‘Treasury Bills’ and ‘Government of India Securities’.\n2. The ‘G-Sec Trading System’ is an online platform of the Reserve Bank of India.\nWhich of the statements given above is/are correct?",
+    optionA: "1 only",
+    optionB: "2 only",
+    optionC: "Both 1 and 2",
+    optionD: "Neither 1 nor 2",
+    correctOption: "C",
+    explanation:
+      "Retail participation routes via mutual funds/RBI Retail Direct ecosystem have expanded G-Sec access; confirm against official paper.",
+    officialSourceUrl: SOURCE_PDFS[2021],
+  },
+  {
+    year: 2020,
+    questionNumber: 1202,
+    topicSlug: "economy-social-development",
+    stem: "In India, which of the following can be considered as indicators of poverty?\n1. Monthly per capita expenditure\n2. Calorie intake\n3. Access to basic amenities\nSelect the correct answer using the code given below:",
+    optionA: "1 and 2 only",
+    optionB: "2 and 3 only",
+    optionC: "1 and 3 only",
+    optionD: "1, 2 and 3",
+    correctOption: "D",
+    explanation:
+      "Poverty measurement debates in India have historically used expenditure, nutrition and amenity-access dimensions.",
+    officialSourceUrl: SOURCE_PDFS[2020],
+  },
+  // Current Affairs / GK style static
+  {
+    year: 2023,
+    questionNumber: 1301,
+    topicSlug: "current-affairs",
+    stem: "Consider the following statements about ‘G20’:\n1. The G20 does not have a permanent secretariat.\n2. India hosted the G20 Leaders’ Summit in 2023.\nWhich of the statements given above is/are correct?",
+    optionA: "1 only",
+    optionB: "2 only",
+    optionC: "Both 1 and 2",
+    optionD: "Neither 1 nor 2",
+    correctOption: "C",
+    explanation:
+      "G20 works via a rotating presidency without a permanent secretariat; India hosted in 2023.",
+    officialSourceUrl: SOURCE_PDFS[2023],
+  },
+  // General science
+  {
+    year: 2022,
+    questionNumber: 1401,
+    topicSlug: "general-science",
+    stem: "Which one of the following is a reason why astronomical distances are measured in light-years?",
+    optionA: "Distances among stellar bodies do not change.",
+    optionB: "Gravity of stellar bodies does not change.",
+    optionC: "Speed of light is always the same.",
+    optionD: "Speed of light slows down near stellar objects.",
+    correctOption: "C",
+    explanation:
+      "A light-year uses the constant speed of light as a convenient cosmic distance unit.",
+    officialSourceUrl: SOURCE_PDFS[2022],
+  },
+  // CSAT
+  {
+    year: 2023,
+    questionNumber: 1,
+    topicSlug: "csat-numeracy",
+    paper: "PRELIMS_CSAT",
+    stem: "A person buys a certain number of articles at 5 for ₹6 and sells them at 6 for ₹5. What is the gain or loss percent?",
+    optionA: "30% loss",
+    optionB: "30% gain",
+    optionC: "About 30.6% loss",
+    optionD: "About 30.6% gain",
+    correctOption: "C",
+    explanation:
+      "Cost price per article = 6/5; selling price = 5/6. Loss% ≈ ((6/5 − 5/6)/(6/5))×100 ≈ 30.56%.",
+    officialSourceUrl:
+      "https://upsc.gov.in/sites/default/files/QP-CSP-23-CSAT-Engl-060623.pdf",
+  },
+  {
+    year: 2023,
+    questionNumber: 2,
+    topicSlug: "csat-reasoning",
+    paper: "PRELIMS_CSAT",
+    stem: "In a certain code, ‘256’ means ‘you are good’; ‘637’ means ‘we are bad’; ‘358’ means ‘good and bad’. Which digit stands for ‘and’?",
+    optionA: "2",
+    optionB: "5",
+    optionC: "8",
+    optionD: "3",
+    correctOption: "C",
+    explanation:
+      "From overlapping codes, 8 uniquely maps to ‘and’.",
+    officialSourceUrl:
+      "https://upsc.gov.in/sites/default/files/QP-CSP-23-CSAT-Engl-060623.pdf",
+  },
+  {
+    year: 2022,
+    questionNumber: 3,
+    topicSlug: "csat-comprehension",
+    paper: "PRELIMS_CSAT",
+    stem: "Based on a short passage idea often tested in CSAT: If all successful people work hard, and some hard workers are successful, which conclusion follows?",
+    optionA: "All hard workers are successful.",
+    optionB: "Some successful people may not work hard — contradicts the premise.",
+    optionC: "Working hard is necessary for success as per the first premise.",
+    optionD: "No hard worker is unsuccessful.",
+    correctOption: "C",
+    explanation:
+      "‘All successful people work hard’ makes hard work necessary for success under that premise.",
+    officialSourceUrl:
+      "https://upsc.gov.in/sites/default/files/CSP-22-CSAT-Engl.pdf",
+  },
+  {
+    year: 2021,
+    questionNumber: 4,
+    topicSlug: "csat-numeracy",
+    paper: "PRELIMS_CSAT",
+    stem: "A sum of money doubles in 10 years at simple interest. In how many years will it become three times at the same rate?",
+    optionA: "15 years",
+    optionB: "20 years",
+    optionC: "25 years",
+    optionD: "30 years",
+    correctOption: "B",
+    explanation:
+      "SI doubles in 10 years ⇒ interest = principal in 10 years. For 2× interest (triple principal) need 20 years.",
+    officialSourceUrl:
+      "https://upsc.gov.in/sites/default/files/CSP_2021_CSAT_English.pdf",
   },
 ];

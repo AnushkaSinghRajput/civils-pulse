@@ -5,7 +5,7 @@ export type SeedTopic = {
   description: string;
 };
 
-/** Prelims GS-I subject map used for tagging and topic-wise mocks. */
+/** Prelims / CSAT subject map used for tagging, filters, and topic-wise mocks. */
 export const SEED_TOPICS: SeedTopic[] = [
   {
     slug: "polity-constitution",
@@ -30,6 +30,12 @@ export const SEED_TOPICS: SeedTopic[] = [
     name: "Agriculture & Food",
     subject: "Economy",
     description: "Farming systems, MSP, food security, and rural economy.",
+  },
+  {
+    slug: "economy-social-development",
+    name: "Economic & Social Development",
+    subject: "Economy",
+    description: "Poverty, inclusion, demography, social sector initiatives.",
   },
   {
     slug: "history-ancient",
@@ -80,6 +86,12 @@ export const SEED_TOPICS: SeedTopic[] = [
     description: "Space, biotech, ICT, defence tech, and applied science.",
   },
   {
+    slug: "general-science",
+    name: "General Science",
+    subject: "Science & Technology",
+    description: "Physics, chemistry, biology basics for Prelims.",
+  },
+  {
     slug: "art-culture",
     name: "Art & Culture",
     subject: "Art & Culture",
@@ -92,9 +104,45 @@ export const SEED_TOPICS: SeedTopic[] = [
     description: "Organisations, treaties, and India’s external engagement.",
   },
   {
+    slug: "current-affairs",
+    name: "Current Affairs & GK",
+    subject: "Current Affairs",
+    description: "Static-current interface themes tested in Prelims GS.",
+  },
+  {
     slug: "security-disaster",
     name: "Security & Disaster Mgmt",
     subject: "Security",
     description: "Internal security, cyber, and disaster preparedness.",
+  },
+  {
+    slug: "ethics-integrity",
+    name: "Ethics & Integrity",
+    subject: "Ethics",
+    description: "Ethics, integrity, aptitude, and case studies for GS-IV.",
+  },
+  {
+    slug: "society-social-issues",
+    name: "Indian Society",
+    subject: "Society",
+    description: "Social structure, diversity, demography, and social change.",
+  },
+  {
+    slug: "csat-comprehension",
+    name: "CSAT Comprehension",
+    subject: "CSAT",
+    description: "Reading comprehension for CSAT Paper II.",
+  },
+  {
+    slug: "csat-reasoning",
+    name: "CSAT Reasoning",
+    subject: "CSAT",
+    description: "Logical reasoning and analytical ability.",
+  },
+  {
+    slug: "csat-numeracy",
+    name: "CSAT Numeracy",
+    subject: "CSAT",
+    description: "Basic numeracy and data interpretation.",
   },
 ];

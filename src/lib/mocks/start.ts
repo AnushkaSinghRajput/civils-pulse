@@ -35,8 +35,10 @@ export async function startMockAttempt(templateId: string) {
     verificationStatus: "APPROVED" as const,
     publishedAt: { not: null },
     paper: template.paper,
-    examType: "PRELIMS" as const,
-    correctOption: { not: null },
+    examType: (template.paper.startsWith("MAINS") ? "MAINS" : "PRELIMS") as
+      | "PRELIMS"
+      | "MAINS",
+    ...(template.paper.startsWith("MAINS") ? {} : { correctOption: { not: null } }),
     ...(template.yearFilter.length
       ? { year: { in: template.yearFilter } }
       : {}),
