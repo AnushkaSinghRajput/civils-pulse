@@ -50,9 +50,11 @@ export async function startMockAttempt(templateId: string) {
     select: { id: true },
   });
 
-  if (pool.length < template.questionCount) {
+  if (pool.length === 0) {
     throw new Error("INSUFFICIENT_QUESTIONS");
   }
+
+  const take = Math.min(template.questionCount, pool.length);
 
   // Deterministic-enough shuffle for MVP (Fisher–Yates with Math.random)
   const shuffled = [...pool];
@@ -60,7 +62,7 @@ export async function startMockAttempt(templateId: string) {
     const j = Math.floor(Math.random() * (i + 1));
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
-  const questionIds = shuffled.slice(0, template.questionCount).map((q) => q.id);
+  const questionIds = shuffled.slice(0, take).map((q) => q.id);
 
   const startedAt = new Date();
   const endsAt = new Date(startedAt.getTime() + template.durationMinutes * 60_000);
