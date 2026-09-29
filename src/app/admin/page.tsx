@@ -1,16 +1,20 @@
 import type { Metadata } from "next";
 import { prisma } from "@/lib/db";
 import { requireRole } from "@/lib/session";
+import { AdminNav } from "@/components/admin/admin-nav";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { verifyQuestion } from "@/lib/admin/verify";
 
-export const metadata: Metadata = { title: "Admin verification" };
+export const metadata: Metadata = {
+  title: "Admin verification",
+  robots: { index: false, follow: false },
+};
 
 export default async function AdminPage() {
   await requireRole(["ADMIN"]);
 
-  const [queue, stats] = await Promise.all([
+  const [queue, stats, userCount] = await Promise.all([
     prisma.question.findMany({
       where: { verificationStatus: { in: ["EXTRACTED", "IN_REVIEW", "NEEDS_FIX"] } },
       orderBy: [{ extractionConfidence: "asc" }, { createdAt: "asc" }],
@@ -20,16 +24,20 @@ export default async function AdminPage() {
       by: ["verificationStatus"],
       _count: true,
     }),
+    prisma.user.count(),
   ]);
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8">
+      <AdminNav current="verification" />
+
       <h1 className="font-[family-name:var(--font-display)] text-3xl text-[var(--brand)]">
         Admin verification
       </h1>
       <p className="mt-2 max-w-2xl text-sm text-[var(--muted-fg)]">
         Extracted questions are never published automatically. Approve only after checking stem,
-        options, answer, language, and official source URL.
+        options, answer, language, and official source URL. {userCount} registered users on the
+        platform (details under Users).
       </p>
 
       <div className="mt-6 flex flex-wrap gap-2">

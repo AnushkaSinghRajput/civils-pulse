@@ -2,7 +2,7 @@ import { auth } from "@/lib/auth";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-const protectedPrefixes = ["/dashboard", "/pyq", "/mocks", "/admin"];
+const protectedPrefixes = ["/dashboard", "/pyq", "/mocks", "/admin", "/practice"];
 const adminPrefixes = ["/admin"];
 
 export async function proxy(request: NextRequest) {
@@ -26,5 +26,11 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/pyq/:path*", "/mocks/:path*", "/admin/:path*"],
+  matcher: [
+    "/dashboard/:path*",
+    "/pyq/:path*",
+    "/mocks/:path*",
+    "/admin/:path*",
+    "/practice/:path*",
+  ],
 };
