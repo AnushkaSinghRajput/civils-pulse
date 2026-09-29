@@ -1,21 +1,7 @@
 import Link from "next/link";
 import { BrandLogo } from "@/components/brand/logo";
 import { Button } from "@/components/ui/button";
-
-const pillars = [
-  {
-    title: "Official provenance",
-    body: "Every PYQ keeps its UPSC PDF link, year, paper, and verification status.",
-  },
-  {
-    title: "Human verification",
-    body: "Extracted items never reach students until an admin approves them.",
-  },
-  {
-    title: "Honest scoring",
-    body: "Prelims mocks use server timers, negative marking, and reproducible marks.",
-  },
-];
+import { JumpInBar } from "@/components/prepare/jump-in";
 
 export default function HomePage() {
   return (
@@ -24,44 +10,32 @@ export default function HomePage() {
         <div>
           <BrandLogo size="lg" href={null} priority className="mb-6" />
           <h1 className="max-w-xl font-[family-name:var(--font-display)] text-3xl leading-snug text-[var(--brand)] sm:text-4xl">
-            Prepare with verified UPSC PYQs — not unverified dumps.
+            Your clear path through UPSC subjects
           </h1>
           <p className="mt-4 max-w-lg text-base leading-relaxed text-[var(--muted-fg)]">
-            CivilsPulse is built for Prelims authenticity first: subject-tagged previous-year
-            questions, topic-wise and full-length mocks, and clear analytics you can trust.
+            Practise verified previous-year questions by paper and topic, then move into timed
+            mocks when you feel ready. Built to keep Civil Services prep simple and focused.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link href="/register">
               <Button size="lg">Start preparing</Button>
             </Link>
-            <Link href="/pyq">
+            <Link href="/practice">
               <Button size="lg" variant="outline">
-                Explore PYQs
+                View practice papers
               </Button>
             </Link>
           </div>
+          <JumpInBar />
         </div>
         <div className="relative mx-auto w-full max-w-md">
           <div className="absolute -inset-4 rounded-full bg-[var(--accent-soft)]/60 blur-2xl" />
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/brand/civilspulse-logo.jpg"
-            alt="CivilsPulse emblem — teal C with gold dome"
+            alt="CivilsPulse emblem with teal C and gold dome"
             className="relative mx-auto w-full max-w-sm rounded-full shadow-[0_24px_60px_rgba(13,49,49,0.18)] ring-1 ring-[var(--border)]"
           />
-        </div>
-      </section>
-
-      <section className="border-t border-[var(--border)] bg-[var(--surface)]/70">
-        <div className="mx-auto grid max-w-6xl gap-8 px-4 py-14 md:grid-cols-3">
-          {pillars.map((p) => (
-            <div key={p.title}>
-              <h2 className="font-[family-name:var(--font-display)] text-lg text-[var(--brand)]">
-                {p.title}
-              </h2>
-              <p className="mt-2 text-sm leading-relaxed text-[var(--muted-fg)]">{p.body}</p>
-            </div>
-          ))}
         </div>
       </section>
     </div>
