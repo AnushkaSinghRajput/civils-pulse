@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
+import { AuthShell } from "@/components/layout/auth-shell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -19,7 +20,7 @@ export default function RegisterPage() {
     const form = new FormData(e.currentTarget);
     const payload = {
       name: String(form.get("name")),
-      email: String(form.get("email")),
+      email: String(form.get("email")).trim(),
       password: String(form.get("password")),
     };
     const res = await fetch("/api/auth/register", {
@@ -48,12 +49,8 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="mx-auto flex min-h-[calc(100vh-3.5rem)] max-w-md flex-col justify-center px-4 py-12">
-      <h1 className="font-[family-name:var(--font-display)] text-3xl text-[var(--brand)]">
-        Create account
-      </h1>
-      <p className="mt-2 text-sm text-[var(--muted-fg)]">Free plan includes core PYQ access.</p>
-      <form onSubmit={onSubmit} className="mt-8 space-y-4">
+    <AuthShell title="Create account" subtitle="Free plan includes core PYQ access.">
+      <form onSubmit={onSubmit} className="space-y-4">
         <div>
           <label className="mb-1 block text-sm" htmlFor="name">
             Name
@@ -84,12 +81,12 @@ export default function RegisterPage() {
           {pending ? "Creating…" : "Create account"}
         </Button>
       </form>
-      <p className="mt-6 text-sm text-[var(--muted-fg)]">
+      <p className="mt-6 text-center text-sm text-[var(--muted-fg)]">
         Already registered?{" "}
         <Link href="/login" className="text-[var(--brand)] underline">
           Log in
         </Link>
       </p>
-    </div>
+    </AuthShell>
   );
 }

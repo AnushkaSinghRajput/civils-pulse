@@ -4,6 +4,7 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { AuthShell } from "@/components/layout/auth-shell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -11,6 +12,7 @@ export default function LoginForm() {
   const router = useRouter();
   const params = useSearchParams();
   const callbackUrl = params.get("callbackUrl") ?? "/dashboard";
+  const justReset = params.get("reset") === "1";
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
 
@@ -20,7 +22,7 @@ export default function LoginForm() {
     setError(null);
     const form = new FormData(e.currentTarget);
     const res = await signIn("credentials", {
-      email: String(form.get("email")),
+      email: String(form.get("email")).trim(),
       password: String(form.get("password")),
       redirect: false,
     });
@@ -34,14 +36,13 @@ export default function LoginForm() {
   }
 
   return (
-    <div className="mx-auto flex min-h-[calc(100vh-3.5rem)] max-w-md flex-col justify-center px-4 py-12">
-      <h1 className="font-[family-name:var(--font-display)] text-3xl text-[var(--brand)]">
-        Log in
-      </h1>
-      <p className="mt-2 text-sm text-[var(--muted-fg)]">
-        Access verified PYQs and your mock history.
-      </p>
-      <form onSubmit={onSubmit} className="mt-8 space-y-4">
+    <AuthShell title="Log in" subtitle="Access verified PYQs and your mock history.">
+      {justReset && (
+        <p className="mb-4 rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-900">
+          Password updated. You can log in with your new password.
+        </p>
+      )}
+      <form onSubmit={onSubmit} className="space-y-4">
         <div>
           <label className="mb-1 block text-sm" htmlFor="email">
             Email
@@ -49,9 +50,17 @@ export default function LoginForm() {
           <Input id="email" name="email" type="email" required autoComplete="email" />
         </div>
         <div>
-          <label className="mb-1 block text-sm" htmlFor="password">
-            Password
-          </label>
+          <div className="mb-1 flex items-center justify-between gap-2">
+            <label className="block text-sm" htmlFor="password">
+              Password
+            </label>
+            <Link
+              href="/forgot-password"
+              className="text-xs text-[var(--brand)] underline underline-offset-2 hover:opacity-80"
+            >
+              Forgot password?
+            </Link>
+          </div>
           <Input
             id="password"
             name="password"
@@ -66,12 +75,12 @@ export default function LoginForm() {
           {pending ? "Signing in…" : "Sign in"}
         </Button>
       </form>
-      <p className="mt-6 text-sm text-[var(--muted-fg)]">
+      <p className="mt-6 text-center text-sm text-[var(--muted-fg)]">
         No account?{" "}
         <Link href="/register" className="text-[var(--brand)] underline">
           Register
         </Link>
       </p>
-    </div>
+    </AuthShell>
   );
 }

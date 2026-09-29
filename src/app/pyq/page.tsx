@@ -66,8 +66,9 @@ export default async function PyqExplorerPage({ searchParams }: { searchParams: 
         PYQ Explorer
       </h1>
       <p className="mt-2 max-w-2xl text-sm text-[var(--muted-fg)]">
-        Only human-verified questions with official UPSC source links are listed here.
-        Extracted-but-unverified items never appear.
+        Human-verified Prelims questions across Polity, Economy, History, Geography,
+        Environment, Science &amp; Tech, Art &amp; Culture, IR and Security — each with an
+        official UPSC source link.
       </p>
 
       <form className="mt-6 grid gap-3 rounded-lg border border-[var(--border)] bg-[var(--surface)] p-4 md:grid-cols-6">
@@ -109,7 +110,7 @@ export default async function PyqExplorerPage({ searchParams }: { searchParams: 
           <option value="">All topics</option>
           {topics.map((t) => (
             <option key={t.id} value={t.slug}>
-              {t.name}
+              {t.subject} — {t.name}
             </option>
           ))}
         </select>

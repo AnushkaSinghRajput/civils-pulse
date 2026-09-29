@@ -1,19 +1,23 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f3f0e8;
-  --foreground: #1c2430;
-  --surface: #fbf9f4;
-  --surface-2: #ebe6da;
-  --surface-3: #ddd6c6;
-  --border: #cfc6b4;
-  --muted: #8a8274;
-  --muted-fg: #5c564c;
-  --brand: #0f4c5c;
-  --brand-hover: #0a3843;
-  --brand-soft: #d7e8ec;
-  --accent: #c45c26;
-  --ring: #0f4c5c;
+  /* Brand — matched to CivilsPulse logo */
+  --background: #f7f4ee;
+  --foreground: #14201f;
+  --surface: #fffcf7;
+  --surface-2: #efe8dc;
+  --surface-3: #e2d8c8;
+  --border: #d4c8b4;
+  --muted: #8a7f70;
+  --muted-fg: #5a5348;
+  --brand: #0d3131;
+  --brand-hover: #0a2626;
+  --brand-soft: #d9e6e4;
+  --accent: #c19a6b;
+  --accent-soft: #f0e4d4;
+  --ring: #0d3131;
+  --success: #1f6b4a;
+  --danger: #9b2c2c;
 }
 
 @theme inline {
@@ -25,8 +29,8 @@
 
 body {
   background:
-    radial-gradient(ellipse 80% 50% at 10% -10%, rgba(15, 76, 92, 0.12), transparent),
-    radial-gradient(ellipse 60% 40% at 100% 0%, rgba(196, 92, 38, 0.08), transparent),
+    radial-gradient(ellipse 70% 45% at 0% 0%, rgba(13, 49, 49, 0.07), transparent 55%),
+    radial-gradient(ellipse 50% 40% at 100% 0%, rgba(193, 154, 107, 0.12), transparent 50%),
     var(--background);
   color: var(--foreground);
 }
@@ -34,4 +38,9 @@ body {
 a {
   color: inherit;
   text-decoration: none;
+}
+
+::selection {
+  background: var(--brand-soft);
+  color: var(--brand);
 }

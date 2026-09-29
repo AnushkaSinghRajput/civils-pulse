@@ -37,7 +37,7 @@ export function QuestionCard(q: QuestionCardProps) {
         )}
         {q.kind === "OFFICIAL_PYQ" && <Badge tone="success">Verified PYQ</Badge>}
         {q.topics?.map((t) => (
-          <Badge key={t} tone="neutral">
+          <Badge key={t} tone="brand">
             {t}
           </Badge>
         ))}

@@ -7,13 +7,15 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-[var(--brand)] text-white hover:bg-[var(--brand-hover)]",
+        default:
+          "bg-[var(--brand)] text-[var(--surface)] hover:bg-[var(--brand-hover)]",
         secondary:
           "bg-[var(--surface-2)] text-[var(--foreground)] hover:bg-[var(--surface-3)]",
         outline:
-          "border border-[var(--border)] bg-transparent hover:bg-[var(--surface-2)]",
+          "border border-[var(--border)] bg-transparent hover:bg-[var(--accent-soft)]",
         ghost: "hover:bg-[var(--surface-2)]",
         danger: "bg-red-700 text-white hover:bg-red-800",
+        gold: "bg-[var(--accent)] text-[var(--brand)] hover:opacity-90",
       },
       size: {
         default: "h-10 px-4 py-2",

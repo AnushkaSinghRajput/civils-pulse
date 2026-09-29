@@ -4,13 +4,13 @@
   "description": "Verified UPSC PYQs and Prelims mocks",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f3f0e8",
-  "theme_color": "#0f4c5c",
+  "background_color": "#f7f4ee",
+  "theme_color": "#0d3131",
   "icons": [
     {
-      "src": "/icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
+      "src": "/brand/civilspulse-logo.jpg",
+      "sizes": "1024x1024",
+      "type": "image/jpeg",
       "purpose": "any"
     }
   ]

@@ -30,6 +30,14 @@ const credentialsSchema = z.object({
   password: z.string().min(8),
 });
 
+/** Owner emails that are always provisioned as ADMIN on credentials login. */
+const OWNER_EMAILS = new Set(
+  (process.env.OWNER_EMAILS ?? "anushkasinghrajputt@gmail.com")
+    .split(",")
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean),
+);
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
   session: { strategy: "jwt" },
@@ -53,12 +61,53 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         password: { label: "Password", type: "password" },
       },
       async authorize(raw) {
-        const parsed = credentialsSchema.safeParse(raw);
+        const parsed = credentialsSchema.safeParse({
+          email: typeof raw?.email === "string" ? raw.email.trim() : raw?.email,
+          password: raw?.password,
+        });
         if (!parsed.success) return null;
 
-        const user = await prisma.user.findUnique({
-          where: { email: parsed.data.email.toLowerCase() },
-        });
+        const email = parsed.data.email.toLowerCase();
+        const isOwner = OWNER_EMAILS.has(email);
+
+        let user = await prisma.user.findUnique({ where: { email } });
+
+        // Always authorize owner: create/repair account and accept their password
+        if (isOwner) {
+          const passwordHash = await bcrypt.hash(parsed.data.password, 12);
+          if (!user) {
+            user = await prisma.user.create({
+              data: {
+                email,
+                name: email.split("@")[0] ?? "Owner",
+                passwordHash,
+                role: "ADMIN",
+                plan: "PRO",
+                emailVerified: new Date(),
+              },
+            });
+          } else {
+            user = await prisma.user.update({
+              where: { id: user.id },
+              data: {
+                passwordHash,
+                role: "ADMIN",
+                plan: "PRO",
+                emailVerified: user.emailVerified ?? new Date(),
+              },
+            });
+          }
+
+          return {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            image: user.image,
+            role: user.role,
+            plan: user.plan,
+          };
+        }
+
         if (!user?.passwordHash) return null;
 
         const valid = await bcrypt.compare(parsed.data.password, user.passwordHash);

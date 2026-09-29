@@ -6,6 +6,16 @@ export const registerSchema = z.object({
   password: z.string().min(8).max(128),
 });
 
+export const forgotPasswordSchema = z.object({
+  email: z.string().email(),
+});
+
+export const resetPasswordSchema = z.object({
+  token: z.string().min(20),
+  email: z.string().email(),
+  password: z.string().min(8).max(128),
+});
+
 export const pyqSearchSchema = z.object({
   q: z.string().optional(),
   year: z.coerce.number().int().min(2014).max(2025).optional(),
